@@ -10,6 +10,47 @@ function App() {
       .then((data) => setTasks(data));
   }, []);
 
+  async function addTask() {
+    const response = await fetch("http://localhost:5000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: task
+      })
+    });
+
+    const newTask = await response.json();
+
+    setTasks((currentTasks) => [...currentTasks, newTask]);
+    setTask("");
+  }
+
+  async function deleteTask(id) {
+    await fetch(`http://localhost:5000/tasks/${id}`, {
+      method: "DELETE"
+    });
+
+    setTasks((currentTasks) =>
+      currentTasks.filter((task) => task.id !== id)
+    );
+  }
+
+  async function toggleTask(id) {
+    const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+      method: "PATCH"
+    });
+
+    const updatedTask = await response.json();
+
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === id ? updatedTask : task
+      )
+    );
+  }
+
   return (
     <div>
       <h1>Task Manager</h1>
@@ -20,16 +61,18 @@ function App() {
         onChange={(e) => setTask(e.target.value)}
       />
 
-      <button>Add</button>
+      <button onClick={addTask}>Add</button>
 
       <ul>
-        {tasks.map((task, index) => (
-          <li key={index}>
-            <span>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <span onClick={() => toggleTask(task.id)}>
               {task.completed ? "☑" : "☐"} {task.title}
             </span>
 
-            <button>Delete</button>
+            <button onClick={() => deleteTask(task.id)}>
+              Delete
+            </button>
           </li>
         ))}
       </ul>
