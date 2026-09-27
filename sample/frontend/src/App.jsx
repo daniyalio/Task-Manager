@@ -2,38 +2,22 @@ import { useState } from "react";
 
 function App() {
   const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState([]);
 
-  function addTask() {
-    if (task.trim() === "") {
-      return;
-    }
+  async function addTask() {
+    const response = await fetch("http://localhost:5000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: task
+      })
+    })
 
-    const newTask = {
-      title: task,
-      completed: false
-    };
-
-    setTasks((currentTasks) => [...currentTasks, newTask]);
+    const newTask = await response.json();
+    console.log(newTask);
     setTask("");
   }
-
-  function toggleTask(index) {
-    setTasks((currentTasks) =>
-      currentTasks.map((task, i) =>
-        i === index
-          ? { ...task, completed: !task.completed }
-          : task
-      )
-    );
-  }
-
-  function deleteTask(index) {
-    setTasks((currentTasks) =>
-      currentTasks.filter((_, i) => i !== index)
-    );
-  }
-
   return (
     <div>
       <h1>Task Manager</h1>
@@ -45,20 +29,6 @@ function App() {
       />
 
       <button onClick={addTask}>Add</button>
-
-      <ul>
-        {tasks.map((task, index) => (
-          <li key={index}>
-            <span onClick={() => toggleTask(index)}>
-              {task.completed ? "☑" : "☐"} {task.title}
-            </span>
-
-            <button onClick={() => deleteTask(index)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
