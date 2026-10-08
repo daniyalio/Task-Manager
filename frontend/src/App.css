@@ -5,6 +5,143 @@
   font-family: system-ui, sans-serif;
 }
 
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-header h1 {
+  margin: 0;
+}
+
+.guide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.65);
+  overflow-y: auto;
+}
+
+.guide-document {
+  width: min(780px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: white;
+  color: #172033;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.guide-toolbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: #e9eef7;
+  border-bottom: 1px solid #d6deeb;
+  font-weight: 600;
+}
+
+.guide-toolbar div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.guide-page {
+  padding: 2.5rem clamp(1.25rem, 5vw, 4rem);
+  line-height: 1.6;
+}
+
+.guide-page h2 {
+  margin-top: 0.25rem;
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.guide-page h3 {
+  margin-top: 2rem;
+  border-bottom: 1px solid #e1e7f0;
+  padding-bottom: 0.35rem;
+}
+
+.guide-label {
+  color: #526b9b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.command-guide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.command-guide div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem;
+  background: #f4f7fb;
+  border: 1px solid #e1e7f0;
+  border-radius: 6px;
+}
+
+.command-guide code {
+  display: block;
+  padding: 0.45rem;
+  background: white;
+  border: 1px solid #e1e7f0;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.guide-example {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #eef5ff;
+  border-left: 4px solid #526b9b;
+}
+
+@media (max-width: 650px) {
+  .app-header {
+    align-items: flex-start;
+  }
+
+  .command-guide {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .guide-overlay {
+    position: static;
+    display: block;
+    padding: 0;
+    background: white;
+  }
+
+  .guide-document {
+    max-height: none;
+    overflow: visible;
+    box-shadow: none;
+  }
+
+  .guide-toolbar,
+  .app-shell > *:not(.guide-overlay) {
+    display: none;
+  }
+}
+
 .task-controls,
 .voice-controls,
 .match-picker,

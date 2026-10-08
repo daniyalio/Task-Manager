@@ -404,6 +404,18 @@ This is the main React component. It handles typed tasks, voice recognition, com
 | `delete exercise` | Deletes every exact matching task |
 | `remove exercise` | Deletes every exact matching task |
 
+## In-app user guide
+
+`App.jsx` also contains a `guideOpen` state value and a top-right `Voice Guide` button. Clicking the button opens a document-style dialog that explains the available commands and both voice modes.
+
+- The dialog is rendered only when `guideOpen` is true.
+- Clicking the dark area outside the document closes the dialog.
+- The toolbar contains Print and Close buttons.
+- The Print button calls the browser's `window.print()` function, allowing the guide to be saved or printed as a PDF.
+- The guide explains adding, completing, and deleting tasks, duplicate-title behavior, and browser support.
+
+The visual layout for this dialog is in `App.css`; that CSS is intentionally not explained in this document.
+
 ## How to run the project
 
 Start the backend in one terminal:

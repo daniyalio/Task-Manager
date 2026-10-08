@@ -20,6 +20,7 @@ function App() {
   const [lastTranscript, setLastTranscript] = useState("");
   const [message, setMessage] = useState("");
   const [duplicateTasks, setDuplicateTasks] = useState([]);
+  const [guideOpen, setGuideOpen] = useState(false);
 
   // Refs let speech callbacks use the latest tasks and recognition object.
   const recognitionRef = useRef(null);
@@ -297,7 +298,16 @@ function App() {
 
   return (
     <main className="app-shell">
-      <h1>Task Manager</h1>
+      <header className="app-header">
+        <h1>Task Manager</h1>
+        <button
+          className="guide-button"
+          type="button"
+          onClick={() => setGuideOpen(true)}
+        >
+          Voice Guide
+        </button>
+      </header>
 
       <section className="task-controls">
         <input
@@ -357,12 +367,83 @@ function App() {
         {tasks.map((item) => (
           <li key={item.id}>
             <button className="task-title" onClick={() => toggleTask(item.id)}>
-              {item.completed ? "[done]" : "[ ]"} {item.title}
+              {item.completed ? "✅" : "⬜"} {item.title}
             </button>
             <button onClick={() => removeTask(item.id)}>Delete</button>
           </li>
         ))}
       </ul>
+
+      {guideOpen && (
+        <div className="guide-overlay" role="presentation" onClick={() => setGuideOpen(false)}>
+          <article
+            className="guide-document"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="guide-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="guide-toolbar">
+              <span>Task Manager User Guide</span>
+              <div>
+                <button type="button" onClick={() => window.print()}>Print</button>
+                <button type="button" onClick={() => setGuideOpen(false)}>Close</button>
+              </div>
+            </div>
+
+            <div className="guide-page">
+              <p className="guide-label">VOICE TASK MANAGEMENT</p>
+              <h2 id="guide-title">How to communicate with your task manager</h2>
+              <p>
+                Use the microphone to create, complete, and delete tasks with simple
+                English sentences.
+              </p>
+
+              <h3>Getting started</h3>
+              <ol>
+                <li>Choose <strong>Push-to-talk</strong> or <strong>Automatic</strong>.</li>
+                <li>Click <strong>Start voice input</strong>.</li>
+                <li>Speak one command clearly.</li>
+                <li>In Automatic mode, continue speaking commands without clicking again.</li>
+              </ol>
+
+              <h3>Available commands</h3>
+              <div className="command-guide">
+                <div>
+                  <strong>Add a task</strong>
+                  <code>add exercise</code>
+                  <code>create task buy groceries</code>
+                </div>
+                <div>
+                  <strong>Complete a task</strong>
+                  <code>complete exercise</code>
+                  <code>finish exercise</code>
+                  <code>mark exercise as done</code>
+                </div>
+                <div>
+                  <strong>Delete a task</strong>
+                  <code>delete exercise</code>
+                  <code>remove exercise</code>
+                </div>
+              </div>
+
+              <h3>Important notes</h3>
+              <ul>
+                <li>Task names must be spoken after the command.</li>
+                <li>Completion uses an exact task-title match, ignoring capitalization.</li>
+                <li>If several tasks have the same name, choose the correct one from the list.</li>
+                <li>Deleting a name removes every task with that exact name.</li>
+                <li>Chrome and Edge provide the best browser support for voice input.</li>
+              </ul>
+
+              <p className="guide-example">
+                Example: say <strong>“add watching movie”</strong>, then say
+                <strong> “complete watching movie”</strong> when you finish it.
+              </p>
+            </div>
+          </article>
+        </div>
+      )}
     </main>
   );
 }
