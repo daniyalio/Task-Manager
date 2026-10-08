@@ -420,4 +420,3 @@ cd frontend
 npm run dev
 ```
 
-Use Chrome or Edge and open the Vite address shown in the terminal, normally `http://localhost:5173`.
