@@ -211,7 +211,7 @@ This is the main React component. It handles typed tasks, voice recognition, com
 - **Line 15:** Starts the `App` component.
 - **Line 16:** Stores the text in the typed task input.
 - **Line 17:** Stores all tasks shown in the list.
-- **Line 18:** Stores either `push` or `automatic` voice mode.
+- **Line 18:** Stores whether voice input is currently active.
 - **Line 19:** Stores whether voice input is idle, listening, or in an error state.
 - **Line 20:** Stores the latest recognized sentence.
 - **Line 21:** Stores feedback shown to the user.
@@ -326,12 +326,12 @@ This is the main React component. It handles typed tasks, voice recognition, com
 - **Line 218:** Creates a fresh recognition object.
 - **Line 219:** Stores it in the ref.
 - **Line 220:** Sets English recognition.
-- **Line 221:** Uses one phrase per session. Automatic mode starts a new session afterward.
+- **Line 221:** Uses one phrase per session. The app starts a new session afterward so automatic voice can continue reliably.
 - **Line 222:** Requests final results instead of interim partial results.
 - **Line 224:** Creates a flag for duplicate-result protection.
 - **Line 226:** Runs when the microphone session successfully starts.
 - **Line 227:** Shows the listening state.
-- **Lines 228–230:** Display different feedback for automatic and push-to-talk modes.
+- **Lines 228–230:** Display automatic-listening feedback.
 - **Line 231:** Closes the start callback.
 - **Line 233:** Runs when the browser returns speech text.
 - **Line 234:** Ignore later result events for the same session.
@@ -361,31 +361,25 @@ This is the main React component. It handles typed tasks, voice recognition, com
 - **Lines 270–274:** Handle browsers that reject starting the microphone and show a useful message.
 - **Line 275:** Closes the session function.
 
-### Lines 277–296: choosing voice mode
+### Lines 277–291: starting and stopping automatic voice
 
 - **Line 277:** Starts the public start function used by the button.
 - **Line 278:** Do nothing when unsupported or already listening.
-- **Line 280:** Remember whether the selected mode is automatic.
+- **Line 280:** Keep automatic voice enabled while the user has not clicked Stop.
 - **Line 281:** Clear the previous transcript.
 - **Line 282:** Start the first recognition session.
 - **Line 283:** Closes the start function.
 - **Line 285:** Starts the button toggle handler.
 - **Lines 286–290:** Stop if listening; otherwise start listening.
 - **Line 291:** Closes the toggle handler.
-- **Line 293:** Starts the mode-selector handler.
-- **Line 294:** Stop the current session before changing mode.
-- **Line 295:** Store the selected mode.
-- **Line 296:** Closes the mode handler.
 
 ### Lines 298–370: user interface
 
 - **Line 298:** Begins the JSX returned by the component.
 - **Lines 299–300:** Create the main page wrapper and heading.
 - **Lines 302–312:** Render the typed task input and Add button. Enter also adds the task.
-- **Lines 314–332:** Render the voice mode selector and Start/Stop button.
-- **Lines 315–319:** Connect the label and selector to the `voiceMode` state.
-- **Lines 320–323:** Disable mode changes while the microphone is active and show the two available modes.
-- **Lines 325–331:** Start or stop voice input when the button is clicked.
+- **Lines 314–328:** Render the automatic voice Start/Stop button.
+- **Lines 315–328:** Clicking the same button starts automatic listening or stops it.
 - **Lines 334–340:** Show browser support information, the latest transcript, and status messages.
 - **Lines 342–354:** Show task choices when completion matched multiple tasks with the same title.
 - **Lines 356–365:** Render every task, allow clicking its title to toggle completion, and provide a Delete button.
@@ -406,7 +400,7 @@ This is the main React component. It handles typed tasks, voice recognition, com
 
 ## In-app user guide
 
-`App.jsx` also contains a `guideOpen` state value and a top-right `Voice Guide` button. Clicking the button opens a document-style dialog that explains the available commands and both voice modes.
+`App.jsx` also contains a `guideOpen` state value and a top-right `Voice Guide` button. Clicking the button opens a document-style dialog that explains the available commands and automatic voice mode.
 
 - The dialog is rendered only when `guideOpen` is true.
 - Clicking the dark area outside the document closes the dialog.

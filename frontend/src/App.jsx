@@ -15,7 +15,6 @@ function titlesAreEqual(firstTitle, secondTitle) {
 function App() {
   const [taskText, setTaskText] = useState("");
   const [tasks, setTasks] = useState([]);
-  const [voiceMode, setVoiceMode] = useState("push");
   const [voiceState, setVoiceState] = useState("idle");
   const [lastTranscript, setLastTranscript] = useState("");
   const [message, setMessage] = useState("");
@@ -226,9 +225,7 @@ function App() {
 
     recognition.onstart = () => {
       setVoiceState("listening");
-      setMessage(automaticModeRef.current
-        ? "Automatic mode is listening..."
-        : "Listening...");
+      setMessage("Automatic voice is listening...");
     };
 
     recognition.onresult = (event) => {
@@ -278,7 +275,7 @@ function App() {
   function startListening() {
     if (!speechSupported || voiceState === "listening") return;
 
-    automaticModeRef.current = voiceMode === "automatic";
+    automaticModeRef.current = true;
     setLastTranscript("");
     startOneRecognitionSession();
   }
@@ -289,11 +286,6 @@ function App() {
     } else {
       startListening();
     }
-  }
-
-  function changeVoiceMode(event) {
-    if (voiceState === "listening") stopListening();
-    setVoiceMode(event.target.value);
   }
 
   return (
@@ -322,22 +314,12 @@ function App() {
       </section>
 
       <section className="voice-controls" aria-label="Voice controls">
-        <label htmlFor="voice-mode">Voice mode:</label>
-        <select
-          id="voice-mode"
-          value={voiceMode}
-          onChange={changeVoiceMode}
-          disabled={voiceState === "listening"}
-        >
-          <option value="push">Push-to-talk</option>
-          <option value="automatic">Automatic</option>
-        </select>
         <button
           type="button"
           onClick={toggleListening}
           disabled={!speechSupported}
         >
-          {voiceState === "listening" ? "Stop listening" : "Start voice input"}
+          {voiceState === "listening" ? "Stop automatic voice" : "Start automatic voice"}
         </button>
       </section>
 
@@ -401,10 +383,9 @@ function App() {
 
               <h3>Getting started</h3>
               <ol>
-                <li>Choose <strong>Push-to-talk</strong> or <strong>Automatic</strong>.</li>
-                <li>Click <strong>Start voice input</strong>.</li>
+                <li>Click <strong>Start automatic voice</strong>.</li>
                 <li>Speak one command clearly.</li>
-                <li>In Automatic mode, continue speaking commands without clicking again.</li>
+                <li>Continue speaking commands without clicking again.</li>
               </ol>
 
               <h3>Available commands</h3>
